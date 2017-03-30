@@ -48,9 +48,9 @@ namespace Tol_Bolts_Check
 			// 
 			// buttonStartBoltsCheck
 			// 
-			this.buttonStartBoltsCheck.Location = new System.Drawing.Point(446, 12);
+			this.buttonStartBoltsCheck.Location = new System.Drawing.Point(520, 13);
 			this.buttonStartBoltsCheck.Name = "buttonStartBoltsCheck";
-			this.buttonStartBoltsCheck.Size = new System.Drawing.Size(75, 23);
+			this.buttonStartBoltsCheck.Size = new System.Drawing.Size(87, 25);
 			this.buttonStartBoltsCheck.TabIndex = 0;
 			this.buttonStartBoltsCheck.Text = "Старт!";
 			this.buttonStartBoltsCheck.UseVisualStyleBackColor = true;
@@ -58,40 +58,43 @@ namespace Tol_Bolts_Check
 			// 
 			// consoleBoltsCheck
 			// 
-			this.consoleBoltsCheck.Location = new System.Drawing.Point(12, 98);
+			this.consoleBoltsCheck.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.consoleBoltsCheck.Location = new System.Drawing.Point(14, 106);
 			this.consoleBoltsCheck.Multiline = true;
 			this.consoleBoltsCheck.Name = "consoleBoltsCheck";
 			this.consoleBoltsCheck.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.consoleBoltsCheck.Size = new System.Drawing.Size(509, 189);
+			this.consoleBoltsCheck.Size = new System.Drawing.Size(1528, 472);
 			this.consoleBoltsCheck.TabIndex = 1;
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(12, 12);
+			this.progressBar1.Location = new System.Drawing.Point(14, 13);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(418, 23);
+			this.progressBar1.Size = new System.Drawing.Size(488, 25);
 			this.progressBar1.TabIndex = 2;
 			// 
 			// checkBoxCreateReport
 			// 
-			this.checkBoxCreateReport.Location = new System.Drawing.Point(13, 53);
+			this.checkBoxCreateReport.Location = new System.Drawing.Point(15, 57);
 			this.checkBoxCreateReport.Name = "checkBoxCreateReport";
-			this.checkBoxCreateReport.Size = new System.Drawing.Size(104, 24);
+			this.checkBoxCreateReport.Size = new System.Drawing.Size(121, 26);
 			this.checkBoxCreateReport.TabIndex = 3;
 			this.checkBoxCreateReport.Text = "зробити звіт";
 			this.checkBoxCreateReport.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(533, 303);
+			this.ClientSize = new System.Drawing.Size(1556, 604);
 			this.Controls.Add(this.checkBoxCreateReport);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.consoleBoltsCheck);
 			this.Controls.Add(this.buttonStartBoltsCheck);
+			this.Font = new System.Drawing.Font("Monospac821 BT", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "MainForm";
 			this.Text = "Tol_Bolts_Check";
+			this.TopMost = true;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
