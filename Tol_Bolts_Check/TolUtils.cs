@@ -19,6 +19,10 @@ namespace Tol_Bolts_Check
 	/// <summary>
 	/// Description of TolUtils.
 	/// </summary>
+	
+	
+	
+	
 	public class TolUtils
 	{
 		private readonly Model _Model = new Model();
@@ -32,6 +36,38 @@ namespace Tol_Bolts_Check
             BoltGroup myBoltGroup = picker.PickObject(Picker.PickObjectEnum.PICK_ONE_BOLTGROUP, "pick BOLT GROUP") as BoltGroup;
 			return myBoltGroup;
 		}
+		
+		
+		// получить выделенные объекты
+		public static ModelObjectEnumerator TolGetSelctedObjects()
+		{
+			Tekla.Structures.Model.UI.ModelObjectSelector a = new Tekla.Structures.Model.UI.ModelObjectSelector();
+			return a.GetSelectedObjects();
+
+		}
+		
+		public static bool TolTestOfBolt (BoltGroup b)
+		{
+			
+			bool a = true;
+			
+			if (!b.Bolt)
+			{
+				a = false;
+			}
+			
+			string standardBolt = "";
+			b.GetReportProperty("BOLT_STANDARD", ref standardBolt);
+			
+			if (b.BoltStandard.Contains("Null") || standardBolt.Contains("TMP"))
+			{
+				a = false;
+			}
+			
+			return a;
+		}
+
+		
 		
 		// проверка группы болтов
 		public static ArrayList CheckOneBoltGroup(BoltGroup myBoltGroup)
