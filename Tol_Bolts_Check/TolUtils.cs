@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-
+using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -312,6 +312,7 @@ namespace Tol_Bolts_Check
 		}
 		
 		
+		
 
 		// вывод списка отрезков
 
@@ -322,6 +323,8 @@ namespace Tol_Bolts_Check
 				Console.WriteLine(ls.Point1 + " " + ls.Point2 + " " + ls.Length());
 			}
 			Console.WriteLine();
-		}			
+		}
+
+		
     }
 }

@@ -31,6 +31,7 @@ namespace Tol_Bolts_Check
 		public double lengthBolt = 0; // довжина болта
 		public string matBolt = ""; // поле material болта
 		public string gradeBolt = ""; // поле garde болта
+		public string gradeBoltR = "";
 		public string finishBolt = ""; // поле finish болта
 		public string standardBolt = ""; // стандарт болта
 		public string type3Bolt = ""; // структура шайб и гаек ХоХоо
@@ -45,9 +46,11 @@ namespace Tol_Bolts_Check
 		public int nNutsBolt = 0; // общее число гаек
 		public int[] nNutsOfNutBolt = new int[] { 0 , 0 }; // число гаек в каждой гайке
 		public string[] typeOfNutBolt = new string[] { "" , "" }; // госты гаек
+		public BoltGroup tolBoltGroup;
 		
 		public TolBoltGroup(BoltGroup myBoltGroup)
 		{
+			tolBoltGroup = myBoltGroup;
 			myBoltGroup.GetReportProperty("NAME_SHORT", ref funBolt);
 			myBoltGroup.GetReportProperty("DIAMETER", ref diaBolt);
 			myBoltGroup.GetReportProperty("LENGTH", ref lengthBolt);
@@ -116,7 +119,7 @@ namespace Tol_Bolts_Check
 			}
 			
 			string pattern = @"^.+\<.+\>.*";
-			string gradeBoltR = Regex.IsMatch(gradeBolt, pattern) ? "." + gradeBolt.Substring(0, gradeBolt.IndexOf('<')) : "";
+			gradeBoltR = Regex.IsMatch(gradeBolt, pattern) ? "." + gradeBolt.Substring(0, gradeBolt.IndexOf('<')) : "";
 			string matBoltR = Regex.IsMatch(matBolt, pattern) ? "." + matBolt.Substring(0, matBolt.IndexOf('<')) : "";
 			string finishBoltR = Regex.IsMatch(finishBolt, pattern) ? "." + finishBolt.Substring(0, finishBolt.IndexOf('<')) : "";
 			
@@ -133,7 +136,9 @@ namespace Tol_Bolts_Check
 			if (nWashersOfWasherBolt[0] == 1)
 			{
 				washersBolt[0] = "ГОСТ " + typeOfWasherBolt[0];
-			} else {
+			}
+			else
+			{
 				washersBolt[0] = "-";
 			}
 			
