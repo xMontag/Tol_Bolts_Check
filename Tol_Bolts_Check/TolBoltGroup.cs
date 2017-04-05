@@ -47,6 +47,7 @@ namespace Tol_Bolts_Check
 		public int[] nNutsOfNutBolt = new int[] { 0 , 0 }; // число гаек в каждой гайке
 		public string[] typeOfNutBolt = new string[] { "" , "" }; // госты гаек
 		public BoltGroup tolBoltGroup;
+		public string GUIDBolt;
 		
 		public TolBoltGroup(BoltGroup myBoltGroup)
 		{
@@ -84,6 +85,7 @@ namespace Tol_Bolts_Check
 				nNutsOfNutBolt[i] = nNutsOfNutBolt[i]/nBolts;
 			}
 			
+			GUIDBolt = myBoltGroup.Identifier.GUID.ToString();
 			
 			myBoltGroup.GetUserProperty("BOLT_USERFIELD_1", ref gapBolt);
 			

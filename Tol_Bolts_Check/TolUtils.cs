@@ -46,6 +46,23 @@ namespace Tol_Bolts_Check
 
 		}
 		
+		public static void TolSelectObjectsByStringGUID(string stringGUID)
+		{
+			Model m = new Model();
+			Identifier myIdentifier;
+			ArrayList ObjectsToSelect = new ArrayList();
+			Tekla.Structures.Model.UI.ModelObjectSelector MS = new Tekla.Structures.Model.UI.ModelObjectSelector();
+			
+			foreach (string myGUID in stringGUID.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+			{
+				ObjectsToSelect.Add(m.SelectModelObject(m.GetIdentifierByGUID(myGUID)));
+			}
+
+			
+			MS.Select(ObjectsToSelect);
+			m.CommitChanges();
+		}
+		
 		public static bool TolTestOfBolt (BoltGroup b)
 		{
 			
@@ -217,9 +234,9 @@ namespace Tol_Bolts_Check
 					//Console.WriteLine(segm1Start.Length() + " " + segm2Start.Length());
 					//Console.WriteLine(segm2End.Length() + " " + segm2End.Length());
 					if ((Math.Abs(segm1Start.Length() - segm2Start.Length()) > 0.01) && (Math.Abs(segm1End.Length() - segm2End.Length()) > 0.01))
-						{
-							return false;
-						}
+					{
+						return false;
+					}
 				}
 			}
 			return true;

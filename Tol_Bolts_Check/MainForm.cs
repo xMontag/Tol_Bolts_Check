@@ -156,14 +156,26 @@ namespace Tol_Bolts_Check
 			}
 			boltsSortedUncompressedTable = TolDataSet.TolSortDataTable(boltsUnsortedUncompressedTable);
 			boltsUnsortedCompressedTable = TolDataSet.TolCompressTable(boltsUnsortedUncompressedTable, boltsUnsortedCompressedTable.TableName);
+			boltsSortedCompressedTable = TolDataSet.TolSortDataTable(TolDataSet.TolCompressTable(boltsUnsortedUncompressedTable, boltsUnsortedCompressedTable.TableName));
+			changeCurrentTable();
 		}
 		
 		void clearClick(object sender, EventArgs e)
 		{
 			consoleBoltsCheck.Text = "";
 			boltsUnsortedUncompressedTable = TolDataSet.TolCreateDateTable(boltsUnsortedUncompressedTable.TableName);
+			boltsUnsortedCompressedTable = TolDataSet.TolCreateDateTable(boltsUnsortedCompressedTable.TableName);
+			boltsSortedUncompressedTable = TolDataSet.TolCreateDateTable(boltsSortedUncompressedTable.TableName);
+			boltsSortedCompressedTable = TolDataSet.TolCreateDateTable(boltsSortedCompressedTable.TableName);
 			changeCurrentTable();
 			count = 0;
+		}
+		
+		void buttonSelectBoltsClick(object sender, EventArgs e)
+		{
+			
+			string a = "" + boltsCurrentTable.Rows[boltsGridView.CurrentCell.RowIndex]["GUIDBolt"];
+			TolUtils.TolSelectObjectsByStringGUID(a);
 		}
 		
 		void buttonStartBoltsCheckClick(object sender, EventArgs e)
@@ -175,6 +187,10 @@ namespace Tol_Bolts_Check
 				TolDataSet.TolAddBoltRow(boltsUnsortedUncompressedTable, myBolt);
 				count++;
 				consoleBoltsCheck.AppendText(View.ViewBoltListInTextArea(count,myBolt));
+				boltsSortedUncompressedTable = TolDataSet.TolSortDataTable(boltsUnsortedUncompressedTable);
+				boltsUnsortedCompressedTable = TolDataSet.TolCompressTable(boltsUnsortedUncompressedTable, boltsUnsortedCompressedTable.TableName);
+				boltsSortedCompressedTable = TolDataSet.TolSortDataTable(TolDataSet.TolCompressTable(boltsUnsortedUncompressedTable, boltsUnsortedCompressedTable.TableName));
+				changeCurrentTable();
 			}
 			else
 			{
