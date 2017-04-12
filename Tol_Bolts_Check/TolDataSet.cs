@@ -7,8 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Linq;
+using System.IO;
+using System.Text;
 using System.Data;
+using System.Windows.Forms;
 using System.Collections;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 using Tekla.Structures;
@@ -33,19 +38,21 @@ namespace Tol_Bolts_Check
 			dc.AutoIncrement = true;
 			dc.AutoIncrementSeed = 1;
 			dc.AutoIncrementStep = 1;
-			myTable.Columns.Add("funBolt", typeof(string));
-			myTable.Columns.Add("desBolt", typeof(string));
-			myTable.Columns.Add("t", typeof(double));
-			myTable.Columns.Add("washer1", typeof(string));
-			myTable.Columns.Add("washer2", typeof(string));
-			myTable.Columns.Add("washer3", typeof(string));
-			myTable.Columns.Add("nut1", typeof(string));
-			myTable.Columns.Add("nut2", typeof(string));
-			myTable.Columns.Add("nBolts", typeof(int));
+			myTable.Columns.Add("Function", typeof(string));
+			myTable.Columns.Add("BoltName", typeof(string));
+			myTable.Columns.Add("BoltMaterialLength", typeof(double));
+			myTable.Columns.Add("Washer1", typeof(string));
+			myTable.Columns.Add("Washer2", typeof(string));
+			myTable.Columns.Add("Washer3", typeof(string));
+			myTable.Columns.Add("Nut1", typeof(string));
+			myTable.Columns.Add("Nut2", typeof(string));
+			myTable.Columns.Add("Quantity", typeof(int));
 			myTable.Columns.Add("standardBolt", typeof(string));
 			myTable.Columns.Add("gradeBolt", typeof(string));
-			myTable.Columns.Add("lengthBolt", typeof(double));
 			myTable.Columns.Add("diaBolt", typeof(double));
+			myTable.Columns.Add("lengthBolt", typeof(double));
+			myTable.Columns.Add("BoltMaterialLengthTekla", typeof(string));
+			myTable.Columns.Add("erorrBolt", typeof(int));
 			myTable.Columns.Add("GUIDBolt", typeof(string));
 			
 			
@@ -58,7 +65,7 @@ namespace Tol_Bolts_Check
 		public static DataTable TolSortDataTable(DataTable myTable)
 		{
 			DataView dv = myTable.DefaultView;
-			dv.Sort = "funBolt ASC, standardBolt ASC, gradeBolt ASC, diaBolt ASC, lengthBolt ASC, desBolt ASC, t ASC, washer1 ASC, washer2 ASC, washer3 ASC, nut1 ASC, nut2 ASC";
+			dv.Sort = "Function ASC, standardBolt ASC, gradeBolt ASC, diaBolt ASC, lengthBolt ASC, BoltName ASC, BoltMaterialLength ASC, Washer1 ASC, Washer2 ASC, Washer3 ASC, Nut1 ASC, Nut2 ASC";
 			DataTable sortedDT = dv.ToTable();
 			
 			return TolClearIDinDataTable(sortedDT);
@@ -71,12 +78,14 @@ namespace Tol_Bolts_Check
 			DataTable TMP1myTable = myTable.Copy();
 			DataTable TMP2myTable = myTable.Copy();
 			int count = 0;
-			ArrayList columns = new ArrayList(){ "funBolt", "desBolt", "t", "washer1", "washer2", "washer3", "nut1", "nut2" }; // по каким колонкам сравнивать
+			ArrayList columns = new ArrayList(){ "Function", "BoltName", "BoltMaterialLength", "Washer1", "Washer2", "Washer3", "Nut1", "Nut2" }; // по каким колонкам сравнивать
 			string tmp1;
 			string tmp2;
 			int nBolts = 0;
 			int nDel = 0; // кол-во удаленных строк
 			string GUIDBolt = "";
+			int errorBolt = 0;
+			ArrayList boltMaterialLengthTekla = new ArrayList();
 			
 			
 			
@@ -91,8 +100,10 @@ namespace Tol_Bolts_Check
 					
 					if (tmp1.Equals(tmp2))
 					{
-						nBolts += (int)TMP2myTable.Rows[i]["nBolts"];
 						
+						nBolts += (int)TMP2myTable.Rows[i]["Quantity"];
+						boltMaterialLengthTekla.Add((string)TMP2myTable.Rows[i]["BoltMaterialLengthTekla"]);
+						errorBolt += (int)TMP2myTable.Rows[i]["erorrBolt"];
 						if (i != j)
 						{
 							TMP1myTable.Rows[i-nDel].Delete();
@@ -102,16 +113,21 @@ namespace Tol_Bolts_Check
 						else
 						{
 							GUIDBolt += "" + (string)TMP2myTable.Rows[i]["GUIDBolt"];
+							
 						}
 					}
 					
 				}
 				nDel = 0;
-				TMP1myTable.Rows[j]["nBolts"] = nBolts;
+				TMP1myTable.Rows[j]["Quantity"] = Math.Round(nBolts * 1.05, 0);
 				TMP1myTable.Rows[j]["GUIDBolt"] = GUIDBolt;
-				//TMP1myTable.Rows[j]["id"] = count;
+				TMP1myTable.Rows[j]["erorrBolt"] = errorBolt;
+				boltMaterialLengthTekla = new ArrayList(boltMaterialLengthTekla.Cast<object>().Distinct().ToArray());
+				TMP1myTable.Rows[j]["BoltMaterialLengthTekla"] = String.Join(" " , (String[]) boltMaterialLengthTekla.ToArray(typeof(string)));
 				nBolts = 0;
+				errorBolt = 0;
 				GUIDBolt = "";
+				boltMaterialLengthTekla.Clear();
 				//count++;
 				TMP2myTable = TMP1myTable.Copy();
 			}
@@ -144,10 +160,111 @@ namespace Tol_Bolts_Check
 		
 		
 		
-		//добавление строки в таблицу
+		//добавление рядка в таблицу
 		public static void TolAddBoltRow(DataTable myTable, TolBoltGroup b)
 		{
-			myTable.Rows.Add(null, b.funBolt, b.desBolt, b.t, b.washersBolt[0], b.washersBolt[1], b.washersBolt[2], b.nutsBolt[0], b.nutsBolt[1], b.nBolts, b.standardBolt, b.gradeBoltR, b.lengthBolt, b.diaBolt, b.GUIDBolt);
+			myTable.Rows.Add(null, b.funBolt, b.desBolt, b.t, b.washersBolt[0], b.washersBolt[1], b.washersBolt[2], b.nutsBolt[0], b.nutsBolt[1], b.nBolts, b.standardBolt, b.gradeBoltR, b.diaBolt, b.lengthBolt, b.materialLengthBoltTekla.ToString(), b.errorBolt, b.GUIDBolt);
+		}
+		
+		public static string TolTitleReports(Model mo)
+		{
+			string XMLstr = "<?xml version=\"1.0\" encoding=\"windows-1251\"?>\r\n" + "<Object>\r\n" + "<ReportType>BPL</ReportType>\r\n";
+			
+			string title = "";
+			
+			string langString = "Українська";
+			
+			string projectNumber = "";
+			
+			string[] nameString = new string[]{ "" , "" , "" , "" , ""};
+
+			
+			mo.GetProjectInfo().GetUserProperty("SdUa_Language", ref langString);
+			mo.GetProjectInfo().GetUserProperty("SdUa_ProjectNumber", ref projectNumber);
+			mo.GetProjectInfo().GetUserProperty("SdUa_NameString1", ref nameString[0]);
+			mo.GetProjectInfo().GetUserProperty("SdUa_NameString2", ref nameString[1]);
+			mo.GetProjectInfo().GetUserProperty("SdUa_NameString3", ref nameString[2]);
+			mo.GetProjectInfo().GetUserProperty("SdUa_NameString4", ref nameString[3]);
+			mo.GetProjectInfo().GetUserProperty("SdUa_NameString5", ref nameString[4]);
+			
+			for (int i = 0; i < nameString.Length; i++)
+			{
+				if (String.IsNullOrEmpty(nameString[i]))
+				{
+					nameString[i] = "";
+				}
+				else
+				{
+					nameString[i] = @"<Name>" + nameString[i] + @"</Name>";
+				}
+			}
+			
+			title = XMLstr + "<Language>" + langString + "</Language>\r\n" + "<Number>" + projectNumber + "</Number>\r\n" + nameString[0] + nameString[1] + nameString[2] + nameString[3] + nameString[4] + "\r\n";
+
+			//MessageBox.Show(title);
+			return title;
+		}
+		
+		public static bool TolExportXMLFile(DataTable myTable , string fileName)
+		{
+			DataTable XMLTable = myTable.Copy();
+			int a = XMLTable.Columns.Count;
+			int nDel = 10;
+			
+			for (int i = nDel; i < a; i++) {
+				XMLTable.Columns.RemoveAt(nDel);
+				
+			}
+			XMLTable.Columns.Remove("id");
+
+			// записать в файл     
+			
+			Model mo = new Model();
+			string puth = mo.GetInfo().ModelPath + @"\Reports\" + fileName;
+
+			
+
+			
+			
+			
+			
+			XMLTable.TableName = "Bolt";
+			DataSet myDataSet = new DataSet("Bolts");
+			
+			myDataSet.Tables.Add(XMLTable);
+			
+			string myText = TolTitleReports(mo);
+			
+			try
+			{
+				myDataSet.WriteXml(puth);
+				//FileStream fs = new FileStream(puth,FileMode.Open,FileAccess.ReadWrite);
+				
+				StreamReader reader = new StreamReader( puth );
+				string tmp = reader.ReadToEnd();
+				reader.Close();
+				
+				string patern = "<?xml version=\"1.0\" standalone=\"yes\"?>";
+				
+				
+				tmp = tmp.Replace( patern, myText );
+				
+				Encoding enc = Encoding.GetEncoding(1251);
+				
+				StreamWriter writer = new StreamWriter(puth, false, enc);
+				
+				writer.Write(tmp + "\r\n</Object>");
+				writer.Close();
+				
+				
+				return true;
+			}
+			catch (Exception ede)
+			{
+				return false;
+			}
+			
+			
 		}
 	}
 }

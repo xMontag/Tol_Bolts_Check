@@ -49,7 +49,7 @@ namespace Tol_Bolts_Check
 		public static void TolSelectObjectsByStringGUID(string stringGUID)
 		{
 			Model m = new Model();
-			Identifier myIdentifier;
+			//Identifier myIdentifier;
 			ArrayList ObjectsToSelect = new ArrayList();
 			Tekla.Structures.Model.UI.ModelObjectSelector MS = new Tekla.Structures.Model.UI.ModelObjectSelector();
 			
@@ -89,7 +89,7 @@ namespace Tol_Bolts_Check
 		// проверка группы болтов
 		public static ArrayList CheckOneBoltGroup(BoltGroup myBoltGroup)
         {
-			bool[] boltChecks = new bool[5];
+			bool[] boltChecks = new bool[1] { true };
             
 			double boltLength = 0,
 			       boltDiameter = 0;
@@ -153,15 +153,24 @@ namespace Tol_Bolts_Check
 				{
 					
 					ArrayList intersections = new ArrayList(part.GetSolid().Intersect(ls));
-					if (intersections.Count == 0 || intersections.Count % 2 != 0)
+					LineSegment myLineSegment = new LineSegment();
+					if (intersections.Count == 0)
 					{
 						//Console.WriteLine("check 1 NO!");
+						myLineSegment = new LineSegment(ls.Point1, ls.Point2);
+						myBoltSubArrayLS.Add(myLineSegment);
 						boltChecks[0] = false;
-						break;
+						//break;
+					}
+					else if (intersections.Count % 2 != 0)
+					{
+						myLineSegment = new LineSegment(intersections[0] as Point, intersections[intersections.Count - 1] as Point);
+						myBoltSubArrayLS.Add(myLineSegment);
+						boltChecks[0] = false;
 					}
 					else
 					{
-						LineSegment myLineSegment = new LineSegment(intersections[0] as Point, intersections[intersections.Count - 1] as Point);
+						myLineSegment = new LineSegment(intersections[0] as Point, intersections[intersections.Count - 1] as Point);
 						myBoltSubArrayLS.Add(myLineSegment);
 					} 	
 				}
@@ -177,12 +186,9 @@ namespace Tol_Bolts_Check
 				if (!(compareArrayLS(myBoltArrayLS[0] as ArrayList, a)))
 				{
 					boltChecks[0] = false;
-					break;
+					//break;
 				}
-				else
-				{
-					boltChecks[0] = true;
-				}
+
 			}
 
 			// составление списка отрезков пересечений одного болта где под индексом 0 полный отрезок болта
@@ -202,7 +208,10 @@ namespace Tol_Bolts_Check
 			//PrintConsole(myBoltArrayOneLS);
 			//Console.WriteLine(boltChecks[0]);
 			
-			return myBoltArrayOneLS;
+			ArrayList res = new ArrayList();
+			res.Add(myBoltArrayOneLS);
+			res.Add(boltChecks);
+			return res;
 		}
 
 		// проверка отрезков пересечения с деталью на одинаковость во всех болтах болтового поля
@@ -342,6 +351,6 @@ namespace Tol_Bolts_Check
 			Console.WriteLine();
 		}
 
-		
+			
     }
 }

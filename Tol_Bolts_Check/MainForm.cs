@@ -7,8 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+
 using System.Windows.Forms;
 using System.Collections;
 using System.Text.RegularExpressions;
@@ -81,12 +83,38 @@ namespace Tol_Bolts_Check
 			{
 				boltsCurrentTable = boltsUnsortedUncompressedTable;
 			}
+			
 			dv.Table = boltsCurrentTable;
 			boltsGridView.DataSource = dv;
+			for (int i = 0; i < boltsGridView.Rows.Count; i++) {
+				if ((int)dv.ToTable().Rows[i]["erorrBolt"] > 0)
+				{
+					boltsGridView.Rows[i].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+				}
+			}
+			
+			
+			
+			
 			//MessageBox.Show(boltsCurrentTable.ToString());
 		}
 		
 		
+		//экспорт текущей таблицы в XML
+		void buttonXMLReportClick(object sender, EventArgs e)
+		{
+			
+			string fileName = @"SdUa_Tol_Вд_Перелік болтових пакетів.SdUaReport";
+			if (TolDataSet.TolExportXMLFile(boltsCurrentTable, fileName))
+			{
+				MessageBox.Show("Report created!");
+			}
+			else
+			{
+				MessageBox.Show("Ooops! There was some error!");
+			}
+			
+		}
 		
 		//изменение надписи на кнопках + изменеение текущей	таблицы
 		void buttonSortedClick(object sender, EventArgs e)
@@ -138,7 +166,7 @@ namespace Tol_Bolts_Check
 						if (TolUtils.TolTestOfBolt(myBoltGroup))
 						{
 							TolBoltGroup myBolt = new TolBoltGroup(myBoltGroup);
-							TolDataSet.TolAddBoltRow(boltsUnsortedUncompressedTable, myBolt);
+							TolDataSet.TolAddBoltRow(boltsUnsortedUncompressedTable, myBolt );
 							count++;
 							consoleBoltsCheck.AppendText(View.ViewBoltListInTextArea(count,myBolt));
 						}
@@ -173,9 +201,17 @@ namespace Tol_Bolts_Check
 		
 		void buttonSelectBoltsClick(object sender, EventArgs e)
 		{
-			
-			string a = "" + boltsCurrentTable.Rows[boltsGridView.CurrentCell.RowIndex]["GUIDBolt"];
-			TolUtils.TolSelectObjectsByStringGUID(a);
+
+			try
+			{
+				string a = "" + dv.ToTable().Rows[boltsGridView.CurrentCell.RowIndex]["GUIDBolt"];
+				TolUtils.TolSelectObjectsByStringGUID(a);
+			}
+			catch (Exception ee)
+			{
+				MessageBox.Show(ee.ToString());
+			}
+
 		}
 		
 		void buttonStartBoltsCheckClick(object sender, EventArgs e)

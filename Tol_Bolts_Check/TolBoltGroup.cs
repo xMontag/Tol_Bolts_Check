@@ -29,6 +29,7 @@ namespace Tol_Bolts_Check
 		public string[] nutsBolt = new string[] { "" , "" }; // гайки
 		public double diaBolt = 0; // діаметр
 		public double lengthBolt = 0; // довжина болта
+		public double materialLengthBoltTekla = 0; // толщина пакета которую возвращает tekla
 		public string matBolt = ""; // поле material болта
 		public string gradeBolt = ""; // поле garde болта
 		public string gradeBoltR = "";
@@ -48,6 +49,7 @@ namespace Tol_Bolts_Check
 		public string[] typeOfNutBolt = new string[] { "" , "" }; // госты гаек
 		public BoltGroup tolBoltGroup;
 		public string GUIDBolt;
+		public int errorBolt = 0; // ошибка в болту
 		
 		public TolBoltGroup(BoltGroup myBoltGroup)
 		{
@@ -56,6 +58,7 @@ namespace Tol_Bolts_Check
 			myBoltGroup.GetReportProperty("DIAMETER", ref diaBolt);
 			myBoltGroup.GetReportProperty("LENGTH", ref lengthBolt);
 			myBoltGroup.GetReportProperty("MATERIAL", ref matBolt);
+			myBoltGroup.GetReportProperty("BOLT_MATERIAL_LENGTH", ref materialLengthBoltTekla);
 			myBoltGroup.GetReportProperty("GRADE", ref gradeBolt);
 			myBoltGroup.GetReportProperty("FINISH", ref finishBolt);
 			myBoltGroup.GetReportProperty("BOLT_STANDARD", ref standardBolt);
@@ -74,6 +77,7 @@ namespace Tol_Bolts_Check
 			myBoltGroup.GetReportProperty("NUT.TYPE1", ref typeOfNutBolt[0]);
 			myBoltGroup.GetReportProperty("NUT.TYPE2", ref typeOfNutBolt[1]);
 			
+			materialLengthBoltTekla = Math.Round(materialLengthBoltTekla, 2);
 			
 			nWashersBolt = nWashersBolt/nBolts; // число шайб в болту
 			for (int i = 0; i < nWashersOfWasherBolt.Length; i++) {
@@ -89,17 +93,31 @@ namespace Tol_Bolts_Check
 			
 			myBoltGroup.GetUserProperty("BOLT_USERFIELD_1", ref gapBolt);
 			
+			ArrayList res = new ArrayList(TolUtils.CheckOneBoltGroup(myBoltGroup));
+			
 			// список отрезков где 0-ой это полный отрезок болта
 			
-			ArrayList myBoltGroupLS = new ArrayList(TolUtils.CheckOneBoltGroup(myBoltGroup));
+			
+			ArrayList myBoltGroupLS = new ArrayList(res[0] as ArrayList);
+			bool[] myBoltGroupChecks = new bool[(res[1] as Array).Length];
+			Array.Copy(res[1] as Array, myBoltGroupChecks, (res[1] as Array).Length);
+			foreach (bool check in myBoltGroupChecks)
+			{
+				if (check == false)
+				{
+					errorBolt = 1;
+				}
+			}
+			
+			//myBoltGroupLS.Add(res[0]);
 			
 			double[] tpl = new double[myBoltGroupLS.Count-1]; // толщины пакета
 			double tplSum = 0; // сумма толщин
-			int tRound = 2; // чисел после запятой в толщине пакета
+			int tRound = 0; // чисел после запятой в толщине пакета
 			int gapRound = 2; // чисел после запятой в толщине пакета
 			
 			for (int i = 1; i < myBoltGroupLS.Count; i++) {
-				tpl[i-1] = (myBoltGroupLS[i] as LineSegment).Length();
+				tpl[i-1] = Math.Round((myBoltGroupLS[i] as LineSegment).Length(), 2);
 			}
 			
 					
@@ -117,6 +135,7 @@ namespace Tol_Bolts_Check
 			{
 				t = Math.Round(tLength, tRound);
 			} else {
+				//t = Math.Round(tLength, tRound);
 				t = Math.Round(tplSum, tRound);
 			}
 			
@@ -193,10 +212,6 @@ namespace Tol_Bolts_Check
 			{
 				nutsBolt[1] = "-";
 			}
-		
-		
-			
-		
 		}
 	}
 }

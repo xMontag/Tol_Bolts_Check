@@ -17,7 +17,7 @@ namespace Tol_Bolts_Check
 	{
 		public static string ViewBoltListInTextArea(int num, TolBoltGroup a)
 		{
-			int n = 10;
+			//int n = 10;
 			int[] length = new int[] { 5 , 15 , 50 , 10 , 20 , 20 , 20 , 20 , 20 , 6 };
 			string tmpString;
 			string myList = "";

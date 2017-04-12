@@ -63,7 +63,7 @@ namespace Tol_Bolts_Check
 			// buttonStartBoltsCheck
 			// 
 			this.buttonStartBoltsCheck.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonStartBoltsCheck.Location = new System.Drawing.Point(459, 12);
+			this.buttonStartBoltsCheck.Location = new System.Drawing.Point(459, 20);
 			this.buttonStartBoltsCheck.Name = "buttonStartBoltsCheck";
 			this.buttonStartBoltsCheck.Size = new System.Drawing.Size(85, 25);
 			this.buttonStartBoltsCheck.TabIndex = 0;
@@ -77,16 +77,16 @@ namespace Tol_Bolts_Check
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.consoleBoltsCheck.Font = new System.Drawing.Font("Lucida Console", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.consoleBoltsCheck.Location = new System.Drawing.Point(12, 60);
+			this.consoleBoltsCheck.Location = new System.Drawing.Point(12, 67);
 			this.consoleBoltsCheck.Multiline = true;
 			this.consoleBoltsCheck.Name = "consoleBoltsCheck";
 			this.consoleBoltsCheck.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.consoleBoltsCheck.Size = new System.Drawing.Size(1310, 187);
+			this.consoleBoltsCheck.Size = new System.Drawing.Size(1310, 45);
 			this.consoleBoltsCheck.TabIndex = 1;
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(12, 12);
+			this.progressBar1.Location = new System.Drawing.Point(12, 20);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size(418, 25);
 			this.progressBar1.TabIndex = 2;
@@ -94,7 +94,7 @@ namespace Tol_Bolts_Check
 			// buttonSelectedBoltsCheck
 			// 
 			this.buttonSelectedBoltsCheck.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonSelectedBoltsCheck.Location = new System.Drawing.Point(550, 12);
+			this.buttonSelectedBoltsCheck.Location = new System.Drawing.Point(550, 20);
 			this.buttonSelectedBoltsCheck.Name = "buttonSelectedBoltsCheck";
 			this.buttonSelectedBoltsCheck.Size = new System.Drawing.Size(85, 25);
 			this.buttonSelectedBoltsCheck.TabIndex = 4;
@@ -104,7 +104,7 @@ namespace Tol_Bolts_Check
 			// 
 			// buttonClear
 			// 
-			this.buttonClear.Location = new System.Drawing.Point(641, 12);
+			this.buttonClear.Location = new System.Drawing.Point(641, 20);
 			this.buttonClear.Name = "buttonClear";
 			this.buttonClear.Size = new System.Drawing.Size(85, 25);
 			this.buttonClear.TabIndex = 5;
@@ -120,15 +120,15 @@ namespace Tol_Bolts_Check
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.boltsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.boltsGridView.Location = new System.Drawing.Point(13, 254);
+			this.boltsGridView.Location = new System.Drawing.Point(13, 118);
 			this.boltsGridView.Name = "boltsGridView";
 			this.boltsGridView.ReadOnly = true;
-			this.boltsGridView.Size = new System.Drawing.Size(1309, 483);
+			this.boltsGridView.Size = new System.Drawing.Size(1309, 619);
 			this.boltsGridView.TabIndex = 6;
 			// 
 			// buttonSorted
 			// 
-			this.buttonSorted.Location = new System.Drawing.Point(732, 12);
+			this.buttonSorted.Location = new System.Drawing.Point(732, 20);
 			this.buttonSorted.Name = "buttonSorted";
 			this.buttonSorted.Size = new System.Drawing.Size(85, 25);
 			this.buttonSorted.TabIndex = 7;
@@ -138,7 +138,7 @@ namespace Tol_Bolts_Check
 			// 
 			// buttonCompressed
 			// 
-			this.buttonCompressed.Location = new System.Drawing.Point(823, 12);
+			this.buttonCompressed.Location = new System.Drawing.Point(823, 20);
 			this.buttonCompressed.Name = "buttonCompressed";
 			this.buttonCompressed.Size = new System.Drawing.Size(85, 25);
 			this.buttonCompressed.TabIndex = 8;
@@ -148,16 +148,17 @@ namespace Tol_Bolts_Check
 			// 
 			// buttonXMLReport
 			// 
-			this.buttonXMLReport.Location = new System.Drawing.Point(914, 12);
+			this.buttonXMLReport.Location = new System.Drawing.Point(914, 20);
 			this.buttonXMLReport.Name = "buttonXMLReport";
 			this.buttonXMLReport.Size = new System.Drawing.Size(85, 25);
 			this.buttonXMLReport.TabIndex = 9;
 			this.buttonXMLReport.Text = "xml report";
 			this.buttonXMLReport.UseVisualStyleBackColor = true;
+			this.buttonXMLReport.Click += new System.EventHandler(this.buttonXMLReportClick);
 			// 
 			// buttonSelectBoltsInModel
 			// 
-			this.buttonSelectBoltsInModel.Location = new System.Drawing.Point(1005, 12);
+			this.buttonSelectBoltsInModel.Location = new System.Drawing.Point(1005, 20);
 			this.buttonSelectBoltsInModel.Name = "buttonSelectBoltsInModel";
 			this.buttonSelectBoltsInModel.Size = new System.Drawing.Size(85, 25);
 			this.buttonSelectBoltsInModel.TabIndex = 10;
@@ -183,7 +184,6 @@ namespace Tol_Bolts_Check
 			this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "MainForm";
 			this.Text = "Tol_Bolts_Check";
-			this.TopMost = true;
 			((System.ComponentModel.ISupportInitialize)(this.boltsGridView)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
