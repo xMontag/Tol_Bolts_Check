@@ -86,12 +86,12 @@ namespace Tol_Bolts_Check
 			
 			dv.Table = boltsCurrentTable;
 			boltsGridView.DataSource = dv;
-			for (int i = 0; i < boltsGridView.Rows.Count; i++) {
-				if ((int)dv.ToTable().Rows[i]["erorrBolt"] > 0)
-				{
-					boltsGridView.Rows[i].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
-				}
-			}
+			//for (int i = 0; i < boltsGridView.Rows.Count; i++) {
+				//if ((int)dv.ToTable().Rows[i]["erorrBolt"] > 0)
+				//{
+				//	boltsGridView.Rows[i].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+				//}
+			//}
 			
 			
 			

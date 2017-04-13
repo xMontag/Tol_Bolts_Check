@@ -242,7 +242,7 @@ namespace Tol_Bolts_Check
 
 					//Console.WriteLine(segm1Start.Length() + " " + segm2Start.Length());
 					//Console.WriteLine(segm2End.Length() + " " + segm2End.Length());
-					if ((Math.Abs(segm1Start.Length() - segm2Start.Length()) > 0.01) && (Math.Abs(segm1End.Length() - segm2End.Length()) > 0.01))
+					if ((Math.Abs(segm1Start.Length() - segm2Start.Length()) > 0.1) && (Math.Abs(segm1End.Length() - segm2End.Length()) > 0.1))
 					{
 						return false;
 					}
